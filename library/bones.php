@@ -29,6 +29,7 @@ removing all the junk we don't
 need.
 *********************/
 
+if (!function_exists('bones_head_cleanup')) :
 function bones_head_cleanup() {
 	// category feeds
 	// remove_action( 'wp_head', 'feed_links_extra', 3 );
@@ -52,9 +53,11 @@ function bones_head_cleanup() {
 	add_filter( 'script_loader_src', 'bones_remove_wp_ver_css_js', 9999 );
 
 } /* end bones head cleanup */
-
+endif;
 // A better title
 // http://www.deluxeblogtips.com/2012/03/better-title-meta-tag.html
+
+if (!function_exists('rw_title')) :
 function rw_title( $title, $sep, $seplocation ) {
   global $page, $paged;
 
@@ -83,43 +86,52 @@ function rw_title( $title, $sep, $seplocation ) {
   return $title;
 
 } // end better title
-
+endif;
 // remove WP version from RSS
+if (!function_exists('bones_rss_version')) :
 function bones_rss_version() { return ''; }
-
+endif;
 // remove WP version from scripts
+if (!function_exists('bones_remove_wp_ver_css_js')) :
 function bones_remove_wp_ver_css_js( $src ) {
 	if ( strpos( $src, 'ver=' ) )
 		$src = remove_query_arg( 'ver', $src );
 	return $src;
 }
+endif;
 
 // remove injected CSS for recent comments widget
+if (!function_exists('bones_remove_wp_widget_recent_comments_style')) :
 function bones_remove_wp_widget_recent_comments_style() {
 	if ( has_filter( 'wp_head', 'wp_widget_recent_comments_style' ) ) {
 		remove_filter( 'wp_head', 'wp_widget_recent_comments_style' );
 	}
 }
+endif;
 
 // remove injected CSS from recent comments widget
+if (!function_exists('bones_remove_recent_comments_style')) :
 function bones_remove_recent_comments_style() {
 	global $wp_widget_factory;
 	if (isset($wp_widget_factory->widgets['WP_Widget_Recent_Comments'])) {
 		remove_action( 'wp_head', array($wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style') );
 	}
 }
+endif;
 
 // remove injected CSS from gallery
+if (!function_exists('bones_gallery_style')) :
 function bones_gallery_style($css) {
 	return preg_replace( "!<style type='text/css'>(.*?)</style>!s", '', $css );
 }
-
+endif;
 
 /*********************
 SCRIPTS & ENQUEUEING
 *********************/
 
 // loading modernizr and jquery, and reply script
+if (!function_exists('bones_scripts_and_styles')) :
 function bones_scripts_and_styles() {
 
   global $wp_styles; // call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
@@ -160,12 +172,13 @@ function bones_scripts_and_styles() {
 
 	}
 }
-
+endif;
 /*********************
 THEME SUPPORT
 *********************/
 
 // Adding WP 3+ Functions & Theme Support
+if (!function_exists('bones_theme_support')) :
 function bones_theme_support() {
 
 	// wp thumbnails (sizes handled in functions.php)
@@ -216,13 +229,14 @@ function bones_theme_support() {
 		)
 	);
 } /* end bones theme support */
-
+endif;
 
 /*********************
 RELATED POSTS FUNCTION
 *********************/
 
 // Related Posts Function (call using bones_related_posts(); )
+if (!function_exists('bones_related_posts')) :
 function bones_related_posts() {
 	echo '<ul id="bones-related-posts">';
 	global $post;
@@ -248,12 +262,13 @@ function bones_related_posts() {
 	wp_reset_postdata();
 	echo '</ul>';
 } /* end bones related posts function */
-
+endif;
 /*********************
 PAGE NAVI
 *********************/
 
 // Numeric Page Navi (built into the theme by default)
+if (!function_exists('bones_page_navi')) :
 function bones_page_navi() {
   global $wp_query;
   $bignum = 999999999;
@@ -273,22 +288,27 @@ function bones_page_navi() {
   ) );
   echo '</nav>';
 } /* end page navi */
+endif;
 
 /*********************
 RANDOM CLEANUP ITEMS
 *********************/
 
 // remove the p from around imgs (http://css-tricks.com/snippets/wordpress/remove-paragraph-tags-from-around-images/)
+if (!function_exists('bones_filter_ptags_on_images')) :
 function bones_filter_ptags_on_images($content){
 	return preg_replace('/<p>\s*(<a .*>)?\s*(<img .* \/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
 }
+endif;
 
 // This removes the annoying […] to a Read More link
+if (!function_exists('bones_excerpt_more')) :
 function bones_excerpt_more($more) {
 	global $post;
 	// edit here if you like
 	return '...  <a class="excerpt-read-more" href="'. get_permalink( $post->ID ) . '" title="'. __( 'Read ', 'bonestheme' ) . esc_attr( get_the_title( $post->ID ) ).'">'. __( 'Read more &raquo;', 'bonestheme' ) .'</a>';
 }
+endif;
 
 
 

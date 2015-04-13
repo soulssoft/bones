@@ -15,14 +15,17 @@ URL: http://themble.com/bones/
 */
 
 // Flush rewrite rules for custom post types
+if (!function_exists('bones_flush_rewrite_rules')) :
 add_action( 'after_switch_theme', 'bones_flush_rewrite_rules' );
 
 // Flush your rewrite rules
 function bones_flush_rewrite_rules() {
 	flush_rewrite_rules();
 }
+endif;
 
 // let's create the function for the custom type
+if (!function_exists('custom_post_example')) :
 function custom_post_example() { 
 	// creating (registering) the custom type 
 	register_post_type( 'custom_type', /* (http://codex.wordpress.org/Function_Reference/register_post_type) */
@@ -58,16 +61,8 @@ function custom_post_example() {
 			'supports' => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions', 'sticky')
 		) /* end of options */
 	); /* end of register post type */
-	
-	/* this adds your post categories to your custom post type */
-	register_taxonomy_for_object_type( 'category', 'custom_type' );
-	/* this adds your post tags to your custom post type */
-	register_taxonomy_for_object_type( 'post_tag', 'custom_type' );
-	
-}
 
-	// adding the function to the Wordpress init
-	add_action( 'init', 'custom_post_example');
+	
 	
 	/*
 	for more information on taxonomies, go here:
@@ -125,5 +120,14 @@ function custom_post_example() {
 		https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
 	*/
 	
+	/* this adds your post categories to your custom post type */
+	register_taxonomy_for_object_type( 'category', 'custom_type' );
+	/* this adds your post tags to your custom post type */
+	register_taxonomy_for_object_type( 'post_tag', 'custom_type' );
+	
+}
 
+	// adding the function to the Wordpress init
+	add_action( 'init', 'custom_post_example');
+endif;
 ?>

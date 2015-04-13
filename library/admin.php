@@ -25,6 +25,7 @@ Digging into WP - http://digwp.com/2010/10/customize-wordpress-dashboard/
 /************* DASHBOARD WIDGETS *****************/
 
 // disable default dashboard widgets
+if (!function_exists('disable_default_dashboard_widgets')) :
 function disable_default_dashboard_widgets() {
 	global $wp_meta_boxes;
 	// unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']);    // Right Now Widget
@@ -49,8 +50,10 @@ function disable_default_dashboard_widgets() {
 	the most commonly used. :D
 	https://github.com/eddiemachado/bones/issues
 	*/
+	// removing the dashboard widgets
+	add_action( 'wp_dashboard_setup', 'disable_default_dashboard_widgets' );
 }
-
+endif;
 /*
 Now let's talk about adding your own custom Dashboard widget.
 Sometimes you want to show clients feeds relative to their
@@ -63,6 +66,7 @@ http://digwp.com/2010/10/customize-wordpress-dashboard/
 */
 
 // RSS Dashboard Widget
+if (!function_exists('bones_rss_dashboard_widget')) :
 function bones_rss_dashboard_widget() {
 	if ( function_exists( 'fetch_feed' ) ) {
 		// include_once( ABSPATH . WPINC . '/feed.php' );               // include the required file
@@ -88,21 +92,22 @@ function bones_rss_dashboard_widget() {
 	</p>
 	<?php }
 }
+endif;
 
 // calling all custom dashboard widgets
+if (!function_exists('bones_custom_dashboard_widgets')) :
 function bones_custom_dashboard_widgets() {
 	wp_add_dashboard_widget( 'bones_rss_dashboard_widget', __( 'Recently on Themble (Customize on admin.php)', 'bonestheme' ), 'bones_rss_dashboard_widget' );
 	/*
 	Be sure to drop any other created Dashboard Widgets
 	in this function and they will all load.
 	*/
+	// adding any custom widgets
+	add_action( 'wp_dashboard_setup', 'bones_custom_dashboard_widgets' );
 }
+endif;
 
 
-// removing the dashboard widgets
-add_action( 'wp_dashboard_setup', 'disable_default_dashboard_widgets' );
-// adding any custom widgets
-add_action( 'wp_dashboard_setup', 'bones_custom_dashboard_widgets' );
 
 
 /************* CUSTOM LOGIN PAGE *****************/
@@ -111,20 +116,24 @@ add_action( 'wp_dashboard_setup', 'bones_custom_dashboard_widgets' );
 
 //Updated to proper 'enqueue' method
 //http://codex.wordpress.org/Plugin_API/Action_Reference/login_enqueue_scripts
+if (!function_exists('bones_login_css')) :
 function bones_login_css() {
 	wp_enqueue_style( 'bones_login_css', get_template_directory_uri() . '/library/css/login.css', false );
+	// calling it only on the login page
+	add_action( 'login_enqueue_scripts', 'bones_login_css', 10 );
 }
+endif;
 
 // changing the logo link from wordpress.org to your site
+if (!function_exists('bones_login_url')) :
 function bones_login_url() {  return home_url(); }
-
-// changing the alt text on the logo to show your site name
-function bones_login_title() { return get_option( 'blogname' ); }
-
-// calling it only on the login page
-add_action( 'login_enqueue_scripts', 'bones_login_css', 10 );
 add_filter( 'login_headerurl', 'bones_login_url' );
+endif;
+// changing the alt text on the logo to show your site name
+if (!function_exists('bones_login_title')) :
+function bones_login_title() { return get_option( 'blogname' ); }
 add_filter( 'login_headertitle', 'bones_login_title' );
+endif;
 
 
 /************* CUSTOMIZE ADMIN *******************/
@@ -137,11 +146,13 @@ you like.
 */
 
 // Custom Backend Footer
+if (!function_exists('bones_custom_admin_footer')) :
 function bones_custom_admin_footer() {
 	_e( '<span id="footer-thankyou">Developed by <a href="http://yoursite.com" target="_blank">Your Site Name</a></span>. Built using <a href="http://themble.com/bones" target="_blank">Bones</a>.', 'bonestheme' );
 }
 
 // adding it to the admin area
 add_filter( 'admin_footer_text', 'bones_custom_admin_footer' );
+endif;
 
 ?>

@@ -19,6 +19,7 @@ LAUNCH BONES
 Let's get everything up and running.
 *********************/
 
+if (!function_exists('bones_ahoy')) :
 function bones_ahoy() {
 
   //Allow editor style.
@@ -62,7 +63,7 @@ function bones_ahoy() {
 
 // let's get this party started
 add_action( 'after_setup_theme', 'bones_ahoy' );
-
+endif;
 
 /************* OEMBED SIZE OPTIONS *************/
 
@@ -96,6 +97,7 @@ You can change the names and dimensions to whatever
 you like. Enjoy!
 */
 
+if (!function_exists('bones_custom_image_sizes')) :
 add_filter( 'image_size_names_choose', 'bones_custom_image_sizes' );
 
 function bones_custom_image_sizes( $sizes ) {
@@ -104,6 +106,7 @@ function bones_custom_image_sizes( $sizes ) {
         'bones-thumb-300' => __('300px by 100px'),
     ) );
 }
+endif;
 
 /*
 The function above adds the ability to use the dropdown menu to select
@@ -129,6 +132,7 @@ new image size.
   - Create some boilerplate Sections, Controls and Settings
 */
 
+if (!function_exists('bones_theme_customizer')) :
 function bones_theme_customizer($wp_customize) {
   // $wp_customize calls go here.
   //
@@ -149,10 +153,11 @@ function bones_theme_customizer($wp_customize) {
 }
 
 add_action( 'customize_register', 'bones_theme_customizer' );
-
+endif;
 /************* ACTIVE SIDEBARS ********************/
 
 // Sidebars & Widgetizes Areas
+if (!function_exists('bones_register_sidebars')) :
 function bones_register_sidebars() {
 	register_sidebar(array(
 		'id' => 'sidebar1',
@@ -189,11 +194,12 @@ function bones_register_sidebars() {
 
 	*/
 } // don't remove this bracket!
-
+endif;
 
 /************* COMMENT LAYOUT *********************/
 
 // Comment Layout
+if (!function_exists('bones_comments')) :
 function bones_comments( $comment, $args, $depth ) {
    $GLOBALS['comment'] = $comment; ?>
   <div id="comment-<?php comment_ID(); ?>" <?php comment_class('cf'); ?>>
@@ -229,7 +235,7 @@ function bones_comments( $comment, $args, $depth ) {
   <?php // </li> is added by WordPress automatically ?>
 <?php
 } // don't remove this bracket!
-
+endif;
 
 /*
 This is a modification of a function found in the
@@ -238,11 +244,13 @@ external fonts. If you're using Google Fonts, you
 can replace these fonts, change it in your scss files
 and be up and running in seconds.
 */
+if (!function_exists('bones_fonts')) :
 function bones_fonts() {
   wp_enqueue_style('googleFonts', 'http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic');
 }
 
 add_action('wp_enqueue_scripts', 'bones_fonts');
+endif;
 
 // Enable support for HTML5 markup.
 	add_theme_support( 'html5', array(
