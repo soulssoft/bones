@@ -50,9 +50,9 @@ function disable_default_dashboard_widgets() {
 	the most commonly used. :D
 	https://github.com/eddiemachado/bones/issues
 	*/
-	// removing the dashboard widgets
-	add_action( 'wp_dashboard_setup', 'disable_default_dashboard_widgets' );
 }
+// removing the dashboard widgets
+add_action( 'wp_dashboard_setup', 'disable_default_dashboard_widgets' );
 endif;
 /*
 Now let's talk about adding your own custom Dashboard widget.
@@ -102,9 +102,9 @@ function bones_custom_dashboard_widgets() {
 	Be sure to drop any other created Dashboard Widgets
 	in this function and they will all load.
 	*/
-	// adding any custom widgets
-	add_action( 'wp_dashboard_setup', 'bones_custom_dashboard_widgets' );
 }
+// adding any custom widgets
+add_action( 'wp_dashboard_setup', 'bones_custom_dashboard_widgets' );
 endif;
 
 
@@ -119,9 +119,10 @@ endif;
 if (!function_exists('bones_login_css')) :
 function bones_login_css() {
 	wp_enqueue_style( 'bones_login_css', get_template_directory_uri() . '/library/css/login.css', false );
-	// calling it only on the login page
-	add_action( 'login_enqueue_scripts', 'bones_login_css', 10 );
-}
+
+}	
+// calling it only on the login page
+add_action( 'login_enqueue_scripts', 'bones_login_css', 10 );
 endif;
 
 // changing the logo link from wordpress.org to your site
